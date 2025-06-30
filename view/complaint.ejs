@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Complaint Form</title>
+    </head>
+    <body>
+        <h1>Submit a Complaint</h1>
+        <% if (error) { %>
+            <p class="error"><%= error %></p>
+            <% } %>
+
+        <% if (success) { %>
+            <p class="success"><%= success %></p>
+            <% } %>
+
+        <form action="/complaint" method="POST">
+            <p><strong>Name:</strong> <%= tenant.name %></p>
+            <p><strong>Email:</strong> <%= tenant.email %></p>
+            <p><strong>Unit:</strong> <%= tenant.unit %></p>
+
+            <label for="issue">Complaint Details:</label><br>
+            <textarea id="issue" name="issue" rows="5" cols="40"><%= formData.issue || '' %></textarea><br><br>
+
+            <button type="submit">Submit Complaint</button>
+        </form>
+    </body>
+</html>
