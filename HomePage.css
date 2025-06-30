@@ -7,7 +7,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: linear-gradient(45deg, #ea4f4c 0%, #6d0019 100%);
+  background: linear-gradient(45deg, #4cd2ea 0%, #8ae622 100%);
 
   .signature {
     font-style: italic;
@@ -23,6 +23,7 @@ body {
 }
 
 .navigationWrapper {
+  border-radius: 10px;
   position: relative;
   display: flex;
   align-items: center;
@@ -33,7 +34,9 @@ body {
   color: white;
   text-transform: uppercase;
   overflow: hidden;
-  width: 600px;
+  width: 90%;
+  margin-top: 0; /* Ensures it hugs the top */
+}
 
   .logoWrapper {
     display: flex;
