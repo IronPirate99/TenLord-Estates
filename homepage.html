@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="HomePage.css">
+     <style>
+        .map-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        
+        .map-responsive {
+            overflow: hidden;
+            padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+            position: relative;
+            height: 0;
+        }
+        
+        .map-responsive iframe {
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            border: 0;
+        }
+    </style>
 </head>
 <body>
     <nav class="navigationWrapper">
@@ -25,9 +48,32 @@
      
     </li>
     <li class="parent"><a class="link" href="#">Contact</a></li>
+
+
   </ul>
 </nav>
+<h1>Search Filters to be applied to the adverts Below</h1><br>
 
 
+
+
+<div class="advertisementandmap">
+  <div class="advertisement">
+    
+   <h2>123 Main Street, Kempton Park, Heatherdale, Capetown   </h2>
+    <p>5 BEDroom 2 bath </p>
+    <p>Price: R10000 p/m </p>
+    <p>Posted on: 2023-10-01</p>
+    <p>Posted by: John Doe</p>
+    <p>Contact: 123-456-7890</p>
+    <button>Contact Agent</button>
+    <button>Shortlist</button>
+    
+  </div>
+  
+    <div class="map-container">
+            <p>Map will be displayed here</p>
+
+  </div>
 </body>
 </html>
