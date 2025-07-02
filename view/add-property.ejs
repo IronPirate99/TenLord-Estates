@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <body>
+            <h1>List a New Property</h1>
+            <form action="/add-property" method="POST" enctype="multipart/form-data">
+                <label>Name:</label><br>
+                <input type="text" name="name" required><br><br>
+
+                <label>Email:</label><br>
+                <input type="text" name="email" required><br><br>
+                
+                <label>Number of Bedrooms:</label><br>
+                <input type="number" name="beds" required><br><br>
+
+                <label>Number of Bathrooms:</label><br>
+                <input type="number" name="baths" required><br><br>
+
+                <label>Location:</label><br>
+                <input type="text" name="location" required><br><br>
+
+                <label>Price (R):</label><br>
+                <input type="text" name="price" required><br><br>
+
+                <label>Upload Pictures:</label><br>
+                <input type="file" name="pics" multiple accept="image/" required><br><br>
+
+                <button type="submit">Submit Property</button>
+            </form>
+        </body>
+    </head>
+</html>
