@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Notice to Tenant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .notice-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .sender-info {
+            background-color: #f8f9fa;
+            border-radius: 10px 10px 0 0;
+            padding: 20px;
+        }
+        .form-section {
+            padding: 20px;
+        }
+        .delivery-options {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 0 0 10px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="notice-card">
+                    <!-- Sender Information -->
+                    <div class="sender-info">
+                        <h3 class="mb-3">Send Notice to Tenant</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Agent/Landlord:</strong> <%= user.name %></p>
+                                <p><strong>Company:</strong> <%= user.company || 'N/A' %></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>License #:</strong> <%= user.licenseNumber || 'N/A' %></p>
+                                <p><strong>Contact:</strong> <%= user.phone %>, <%= user.email %></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notice Form -->
+                    <form action="/notices/send" method="POST" class="form-section" id="noticeForm">
+                        <input type="hidden" name="senderId" value="<%= user._id %>">
+                        <input type="hidden" name="senderName" value="<%= user.name %>">
+                        
+                        <div class="mb-3">
+                            <label for="tenantSelect" class="form-label">Select Tenant</label>
+                            <select class="form-select" id="tenantSelect" name="tenantId" required>
+                                <option value="">-- Select Tenant --</option>
+                                <% tenants.forEach(tenant => { %>
+                                    <option value="<%= tenant._id %>">
+                                        <%= tenant.name %> - <%= tenant.propertyAddress %>
+                                    </option>
+                                <% }); %>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="noticeType" class="form-label">Notice Type</label>
+                            <select class="form-select" id="noticeType" name="noticeType" required>
+                                <option value="">-- Select Notice Type --</option>
+                                <option value="Rental Increase">Rental Increase</option>
+                                <option value="Maintenance Notice">Maintenance Notice</option>
+                                <option value="Noise Complaint">Noise Complaint</option>
+                                <option value="Lease Violation">Lease Violation</option>
+                                <option value="Inspection Notice">Inspection Notice</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="effectiveDate" class="form-label">Effective Date (if applicable)</label>
+                            <input type="date" class="form-control" id="effectiveDate" name="effectiveDate">
+                        </div>
+
+                        <!-- Delivery Options -->
+                        <div class="delivery-options">
+                            <h5 class="mb-3">Delivery Options</h5>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="platformNotification" name="deliveryMethods" value="platform" checked>
+                                <label class="form-check-label" for="platformNotification">
+                                    Send to tenant's notification center
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="emailNotification" name="deliveryMethods" value="email" checked>
+                                <label class="form-check-label" for="emailNotification">
+                                    Send via Email
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="smsNotification" name="deliveryMethods" value="sms">
+                                <label class="form-check-label" for="smsNotification">
+                                    Send via SMS
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="whatsappNotification" name="deliveryMethods" value="whatsapp">
+                                <label class="form-check-label" for="whatsappNotification">
+                                    Send via WhatsApp
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="button" class="btn btn-secondary me-md-2" onclick="previewNotice()">Preview</button>
+                            <button type="submit" class="btn btn-primary">Send Notice</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">Notice Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="previewContent">
+                    <!-- Preview content will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('noticeForm').submit()">Send Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function previewNotice() {
+            const form = document.getElementById('noticeForm');
+            const tenantSelect = document.getElementById('tenantSelect');
+            const tenantName = tenantSelect.options[tenantSelect.selectedIndex].text.split(' - ')[0];
+            const noticeType = document.getElementById('noticeType').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            const effectiveDate = document.getElementById('effectiveDate').value;
+            
+            let previewHtml = `
+                <h4>${subject || 'Notice Preview'}</h4>
+                <hr>
+                <p><strong>To:</strong> ${tenantName}</p>
+                <p><strong>From:</strong> <%= user.name %></p>
+                <p><strong>Notice Type:</strong> ${noticeType}</p>
+                ${effectiveDate ? `<p><strong>Effective Date:</strong> ${new Date(effectiveDate).toLocaleDateString()}</p>` : ''}
+                <hr>
+                <div style="white-space: pre-wrap;">${message}</div>
+                <hr>
+                <p class="text-muted">This notice will be sent via: 
+                    ${Array.from(document.querySelectorAll('input[name="deliveryMethods"]:checked')).map(el => el.nextElementSibling.textContent.trim()).join(', ')}
+                </p>
+            `;
+            
+            document.getElementById('previewContent').innerHTML = previewHtml;
+            const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+            previewModal.show();
+        }
+    </script>
+</body>
+</html>
